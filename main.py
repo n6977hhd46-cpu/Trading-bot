@@ -5,7 +5,7 @@ print("It demonstrates basic print statements.")
 
 print ("Hard shit")
 
-
+print("More hard shit")
 
 
 
