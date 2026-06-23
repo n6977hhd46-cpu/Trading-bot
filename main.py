@@ -3,6 +3,7 @@ print("This is a sample Python script.")
 print("It demonstrates basic print statements.")
 # push more shit
 
+print ("Hard shit")
 
 
 
