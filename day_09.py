@@ -213,6 +213,18 @@ def has_macd_confirmation(candles):
 
     return macd["macd_line"] > macd["signal_line"] and macd["histogram"] > 0
 
+def has_trend_confirmation(candles, period=10):
+    closing_prices = get_closing_prices(candles)
+
+    ema_values = calculate_ema(closing_prices, period)
+
+    if ema_values is None:
+        return False
+
+    latest_close = closing_prices[-1]
+    latest_ema = ema_values[-1]
+
+    return latest_close > latest_ema
 
 def is_buy_signal(candles):
     return (
@@ -220,8 +232,8 @@ def is_buy_signal(candles):
         and has_volume_confirmation(candles)
         and has_acceptable_rsi(candles, max_rsi=90)
         and has_macd_confirmation(candles)
+        and has_trend_confirmation(candles, period=10)
     )
-
 
 def get_recent_low(candles):
     previous_candles = candles[:-1]
@@ -263,12 +275,14 @@ print("Latest volume:", candles[-1]["volume"])
 print("Volume confirmation:", has_volume_confirmation(candles))
 
 print("RSI:", round(rsi, 2))
-print("Acceptable RSI:", has_acceptable_rsi(candles))
+print("Acceptable RSI:", has_acceptable_rsi(candles, max_rsi=90))
 
 print("MACD line:", round(macd["macd_line"], 4))
 print("Signal line:", round(macd["signal_line"], 4))
 print("Histogram:", round(macd["histogram"], 4))
 print("MACD confirmation:", has_macd_confirmation(candles))
+
+print("Trend confirmation:", has_trend_confirmation(candles, period=10))
 
 print("Buy signal:", is_buy_signal(candles))
 
